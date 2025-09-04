@@ -1317,6 +1317,73 @@
             let satisfactionRating = null;
             let recommendRating = null;
 
+            // Voice input setup
+            const voiceInputBtn = document.getElementById('voiceInput');
+            const commentsTextarea = document.getElementById('comments');
+            let recognition;
+            let isRecognizing = false;
+
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+                recognition.lang = 'en-US';
+                recognition.interimResults = true;
+                recognition.continuous = true;
+
+                recognition.onresult = (event) => {
+                    let interimTranscript = '';
+                    let finalTranscript = '';
+
+                    for (let i = event.resultIndex; i < event.results.length; i++) {
+                        const transcript = event.results[i][0].transcript;
+                        if (event.results[i].isFinal) {
+                            finalTranscript += transcript + ' ';
+                        } else {
+                            interimTranscript += transcript;
+                        }
+                    }
+
+                    commentsTextarea.value = finalTranscript + interimTranscript;
+                    commentsTextarea.scrollTop = commentsTextarea.scrollHeight;
+                };
+
+                recognition.onstart = () => {
+                    isRecognizing = true;
+                    voiceInputBtn.classList.add('active');
+                    voiceInputBtn.setAttribute('aria-label', 'Stop voice input');
+                };
+
+                recognition.onend = () => {
+                    isRecognizing = false;
+                    voiceInputBtn.classList.remove('active');
+                    voiceInputBtn.setAttribute('aria-label', 'Start voice input');
+                };
+
+                recognition.onerror = (event) => {
+                    console.error('Speech recognition error:', event.error);
+                    isRecognizing = false;
+                    voiceInputBtn.classList.remove('active');
+                    voiceInputBtn.setAttribute('aria-label', 'Start voice input');
+                };
+
+                voiceInputBtn.addEventListener('click', () => {
+                    if (isRecognizing) {
+                        recognition.stop();
+                    } else {
+                        try {
+                            recognition.start();
+                            if (navigator.vibrate) {
+                                navigator.vibrate(50);
+                            }
+                        } catch (e) {
+                            console.error('Error starting recognition:', e);
+                        }
+                    }
+                });
+            } else {
+                voiceInputBtn.style.display = 'none';
+                console.warn('Speech recognition not supported in this browser.');
+            }
+
             function switchTab(tabName) {
                 tabButtons.forEach(btn => {
                     const isActive = btn.dataset.tab === tabName;
