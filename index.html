@@ -1028,6 +1028,72 @@
             <p>You are amazing!</p>
         </div>
 
+	<!-- Add these behavioral features after hospital-header -->
+<div class="behavioral-features">
+    <!-- Impact Stats Bar -->
+    <div class="impact-stats" id="impactStats">
+        <div class="impact-number">
+            <span class="impact-icon">🎯</span>
+            <span id="impactNumber">47</span>
+            <span>improvements</span>
+        </div>
+        <div class="impact-text">made from patient feedback this year</div>
+    </div>
+
+    <!-- Community Participation -->
+    <div class="community-stats" id="communityStats">
+        <div class="community-number" id="communityNumber">1,247</div>
+        <div class="community-text">patients helping improve healthcare at MSH</div>
+    </div>
+
+    <!-- Quarterly Progress -->
+    <div class="progress-section">
+        <div class="progress-title">Q4 2024 Improvements</div>
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+        </div>
+        <div class="progress-labels">
+            <span>Q4 Start</span>
+            <span>Q4 Target</span>
+        </div>
+        <div class="progress-percentage" id="progressPercentage">0% Complete</div>
+    </div>
+
+    <!-- Sentiment Trend -->
+    <div class="sentiment-card" id="sentimentCard">
+        <div class="sentiment-title">Patient Satisfaction Trend</div>
+        <div class="sentiment-value">
+            <span class="trend-arrow">⬆️</span>
+            <span id="sentimentValue">+12%</span>
+            <span>this quarter</span>
+        </div>
+    </div>
+
+    <!-- Examples Carousel -->
+    <div class="examples-section">
+        <div class="examples-title">Recent Changes You Inspired</div>
+        <div class="example-carousel">
+            <div class="example-item active">
+                <div class="example-text">"Your suggestion about waiting room seating led to new comfortable chairs being installed!"</div>
+                <div class="example-date">Implemented: March 2024</div>
+            </div>
+            <div class="example-item">
+                <div class="example-text">"Patient feedback about appointment reminders helped us launch our new SMS notification system."</div>
+                <div class="example-date">Implemented: February 2024</div>
+            </div>
+            <div class="example-item">
+                <div class="example-text">"Your comments about parking led to our new valet service on busy days."</div>
+                <div class="example-date">Implemented: January 2024</div>
+            </div>
+        </div>
+        <div class="carousel-dots">
+            <div class="carousel-dot active" data-slide="0"></div>
+            <div class="carousel-dot" data-slide="1"></div>
+            <div class="carousel-dot" data-slide="2"></div>
+        </div>
+    </div>
+</div>
+
         <div class="tab-navigation" role="tablist">
             <div class="tab-indicator" id="tabIndicator"></div>
             <button class="tab-btn active" data-tab="feedback" role="tab" aria-selected="true" aria-controls="feedbackTab">
@@ -1297,6 +1363,316 @@
             0% { opacity: 1; transform: translateY(0) scale(1); }
             100% { opacity: 0; transform: translateY(-50px) scale(0.5); }
         }
+
+	/* Add these to your existing CSS */
+
+/* BEHAVIORAL FEATURES CONTAINER */
+.behavioral-features {
+    margin-bottom: 20px;
+}
+
+/* IMPACT STATS BAR */
+.impact-stats {
+    background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+    border-radius: 20px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    animation: slideInFromTop 0.8s ease-out;
+}
+
+.impact-stats::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    animation: shimmer 3s infinite;
+}
+
+@keyframes slideInFromTop {
+    from { opacity: 0; transform: translateY(-30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+.impact-number {
+    font-size: 24px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.impact-text {
+    font-size: 13px;
+    font-weight: 600;
+    opacity: 0.9;
+    letter-spacing: 0.3px;
+}
+
+.impact-icon {
+    animation: bounce 2s infinite;
+}
+
+/* COMMUNITY PARTICIPATION */
+.community-stats {
+    background: rgba(87, 202, 195, 0.1);
+    border: 2px solid rgba(87, 202, 195, 0.2);
+    border-radius: 16px;
+    padding: 14px;
+    margin-bottom: 16px;
+    text-align: center;
+    position: relative;
+}
+
+.community-number {
+    font-size: 20px;
+    font-weight: 800;
+    color: #57CAC3;
+    margin-bottom: 6px;
+    animation: countUp 2s ease-out;
+}
+
+@keyframes countUp {
+    from { opacity: 0; transform: scale(0.5); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.community-text {
+    color: #2d3436;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* QUARTERLY PROGRESS BAR */
+.progress-section {
+    margin-bottom: 16px;
+    padding: 14px;
+    background: rgba(152, 251, 152, 0.05);
+    border-radius: 16px;
+    border: 1px solid rgba(152, 251, 152, 0.2);
+}
+
+.progress-title {
+    color: #2d3436;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.progress-bar-container {
+    background: rgba(152, 251, 152, 0.2);
+    border-radius: 20px;
+    height: 10px;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 6px;
+}
+
+.progress-bar {
+    background: linear-gradient(90deg, #27ae60, #2ecc71);
+    height: 100%;
+    border-radius: 20px;
+    transition: width 2s ease-out;
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    animation: progressShine 2s infinite;
+}
+
+@keyframes progressShine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.progress-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #636e72;
+    font-weight: 600;
+}
+
+.progress-percentage {
+    text-align: center;
+    color: #27ae60;
+    font-weight: 800;
+    font-size: 12px;
+    margin-top: 6px;
+}
+
+/* SENTIMENT TREND */
+.sentiment-card {
+    background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+    border-radius: 16px;
+    padding: 14px;
+    color: white;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+}
+
+.sentiment-card::before {
+    content: '📈';
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    font-size: 20px;
+    opacity: 0.3;
+}
+
+.sentiment-title {
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    opacity: 0.9;
+}
+
+.sentiment-value {
+    font-size: 18px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.trend-arrow {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+
+/* EXAMPLES CAROUSEL */
+.examples-section {
+    margin-bottom: 16px;
+}
+
+.examples-title {
+    color: #2d3436;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.example-carousel {
+    position: relative;
+    background: white;
+    border-radius: 16px;
+    padding: 14px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    min-height: 80px;
+    overflow: hidden;
+}
+
+.example-item {
+    display: none;
+    animation: slideIn 0.5s ease-out;
+}
+
+.example-item.active {
+    display: block;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.example-text {
+    color: #2d3436;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.5;
+    margin-bottom: 6px;
+}
+
+.example-date {
+    color: #636e72;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.carousel-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(152, 251, 152, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.carousel-dot.active {
+    background: #27ae60;
+    transform: scale(1.2);
+}
+
+/* Mobile responsiveness for behavioral features */
+@media (max-width: 480px) {
+    .impact-number {
+        font-size: 20px;
+        gap: 6px;
+        margin-bottom: 4px;
+    }
+    
+    .impact-text {
+        font-size: 12px;
+    }
+    
+    .community-number {
+        font-size: 18px;
+        margin-bottom: 4px;
+    }
+    
+    .community-text {
+        font-size: 12px;
+    }
+    
+    .sentiment-value {
+        font-size: 16px;
+        gap: 4px;
+    }
+    
+    .example-text {
+        font-size: 12px;
+    }
+    
+    .example-date {
+        font-size: 10px;
+    }
+}
+	
+
     </style>
 
     <script>
@@ -1888,6 +2264,157 @@
                 setTimeout(() => sparkle.remove(), 1000);
             });
         });
+
+	// Add these functions to your existing JavaScript
+
+// Global variables for behavioral features
+let currentExampleIndex = 0;
+const hospitalExamples = [
+    {
+        text: "Your suggestion about waiting room seating led to new comfortable chairs being installed!",
+        date: "Implemented: March 2024"
+    },
+    {
+        text: "Patient feedback about appointment reminders helped us launch our new SMS notification system.",
+        date: "Implemented: February 2024"
+    },
+    {
+        text: "Your comments about parking led to our new valet service on busy days.",
+        date: "Implemented: January 2024"
+    }
+];
+
+// Initialize behavioral features
+function initializeBehavioralFeatures() {
+    // Set initial progress bar animation
+    setTimeout(() => {
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressPercentage');
+        if (progressBar && progressText) {
+            progressBar.style.width = '73%';
+            progressText.textContent = '73% Complete';
+        }
+    }, 1000);
+    
+    // Set up carousel dots
+    const carouselDots = document.querySelectorAll('.carousel-dot');
+    carouselDots.forEach((dot, index) => {
+        dot.addEventListener('click', () => showExample(index));
+    });
+    
+    // Start auto-rotation
+    startExampleRotation();
+}
+
+// Example carousel functions
+function showExample(index) {
+    const items = document.querySelectorAll('.example-item');
+    const dots = document.querySelectorAll('.carousel-dot');
+    
+    if (!items.length || !dots.length) return;
+    
+    // Hide all examples
+    items.forEach(item => item.classList.remove('active'));
+    dots.forEach(dot => dot.classList.remove('active'));
+    
+    // Show selected example
+    if (items[index] && dots[index]) {
+        items[index].classList.add('active');
+        dots[index].classList.add('active');
+        currentExampleIndex = index;
+    }
+}
+
+function nextExample() {
+    const nextIndex = (currentExampleIndex + 1) % hospitalExamples.length;
+    showExample(nextIndex);
+}
+
+function startExampleRotation() {
+    setInterval(nextExample, 5000); // Change every 5 seconds
+}
+
+// Functions to update data (for future backend integration)
+function updateImpactStats(newNumber) {
+    const impactElement = document.getElementById('impactNumber');
+    if (impactElement) {
+        animateNumber(impactElement, parseInt(impactElement.textContent), newNumber, 2000);
+    }
+}
+
+function updateCommunityStats(newNumber) {
+    const communityElement = document.getElementById('communityNumber');
+    if (communityElement) {
+        const currentNumber = parseInt(communityElement.textContent.replace(',', ''));
+        animateNumberWithComma(communityElement, currentNumber, newNumber, 2000);
+    }
+}
+
+function updateSentimentTrend(percentage, direction = 'up') {
+    const sentimentValue = document.getElementById('sentimentValue');
+    const trendArrow = document.querySelector('.trend-arrow');
+    const sentimentCard = document.getElementById('sentimentCard');
+    
+    if (!sentimentValue || !trendArrow || !sentimentCard) return;
+    
+    const sign = direction === 'up' ? '+' : '-';
+    const arrow = direction === 'up' ? '⬆️' : '⬇️';
+    
+    sentimentValue.textContent = sign + percentage + '%';
+    trendArrow.textContent = arrow;
+    
+    // Update card color based on trend
+    if (direction === 'up') {
+        sentimentCard.style.background = 'linear-gradient(135deg, #00b894 0%, #00a085 100%)';
+    } else {
+        sentimentCard.style.background = 'linear-gradient(135deg, #e17055 0%, #d63031 100%)';
+    }
+}
+
+// Number animation functions
+function animateNumber(element, start, end, duration) {
+    const startTime = performance.now();
+    const difference = end - start;
+    
+    function updateNumber(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const current = Math.floor(start + (difference * progress));
+        element.textContent = current;
+        
+        if (progress < 1) {
+            requestAnimationFrame(updateNumber);
+        }
+    }
+    
+    requestAnimationFrame(updateNumber);
+}
+
+function animateNumberWithComma(element, start, end, duration) {
+    const startTime = performance.now();
+    const difference = end - start;
+    
+    function updateNumber(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const current = Math.floor(start + (difference * progress));
+        element.textContent = current.toLocaleString();
+        
+        if (progress < 1) {
+            requestAnimationFrame(updateNumber);
+        }
+    }
+    
+    requestAnimationFrame(updateNumber);
+}
+
+// Add this to your existing DOMContentLoaded event listener
+document.addEventListener('DOMContentLoaded', () => {
+    // Your existing initialization code...
+    
+    // Add behavioral features initialization
+    initializeBehavioralFeatures();
+});
     </script>
 </body>
     </html>
