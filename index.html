@@ -21,6 +21,7 @@
             emailjs.init("Z0VMFmiXu1u4xRa9b");
         })();
     </script>
+	<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <title>Patient Services - Magodo Specialist Hospital</title>
     <style>
         * {
@@ -1065,7 +1066,7 @@
                 <div class="example-date">Implemented: March 2024</div>
             </div>
             <div class="example-item">
-                <div class="example-text">"Patient feedback about appointment reminders helped us launch our new SMS/WhatsApp notification system."</div>
+                <div class="example-text">"Your feedback about appointment reminders helped us launch our new SMS/WhatsApp notification system."</div>
                 <div class="example-date">Implemented: February 2024</div>
             </div>
             <div class="example-item">
@@ -1663,6 +1664,11 @@
     </style>
 
     <script>
+		// Initialize Supabase - REPLACE WITH YOUR ACTUAL VALUES
+    const SUPABASE_URL = 'https://kklctifgfpfxrivduvqn.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtrbGN0aWZnZnBmeHJpdmR1dnFuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTczNTQ2MzYsImV4cCI6MjA3MjkzMDYzNn0.RoiW9fqm3K_cSvDzlHAkewaMv9p6PgwuOf8nrr4dC3I';
+    const { createClient } = supabase;
+	const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         document.addEventListener('DOMContentLoaded', () => {
             let currentTab = 'feedback';
             const tabButtons = document.querySelectorAll('.tab-btn');
@@ -1961,18 +1967,23 @@
                 submitFeedback(feedbackData);
             });
 
-            function submitFeedback(data) {
-                const submitBtn = document.getElementById('submitBtn');
-                submitBtn.innerHTML = '<span style="opacity: 0.7">🚀 Sending Feedback...</span>';
-                submitBtn.disabled = true;
+            // Modify your existing submitFeedback function
+			function submitFeedback(data) {
+				const submitBtn = document.getElementById('submitBtn');
+				submitBtn.innerHTML = '<span style="opacity: 0.7">🚀 Sending Feedback...</span>';
+				submitBtn.disabled = true;
 
-                sendFeedbackEmail(data);
+				// Send the email as before
+				sendFeedbackEmail(data);
 
-                setTimeout(() => {
-                    document.getElementById('surveyForm').style.display = 'none';
-                    document.getElementById('thankYou').style.display = 'block';
-                }, 1500);
-            }
+				// Update the community stats
+				incrementFeedbackStats();
+
+				setTimeout(() => {
+					document.getElementById('surveyForm').style.display = 'none';
+					document.getElementById('thankYou').style.display = 'block';
+				}, 1500);
+			}
 
             async function analyzeTextFeedback(text) {
                 if (!text || text.trim().length === 0) {
@@ -2271,28 +2282,118 @@ const hospitalExamples = [
     }
 ];
 
-// Initialize behavioral features
-function initializeBehavioralFeatures() {
-    // Set initial progress bar animation
-    setTimeout(() => {
-        const progressBar = document.getElementById('progressBar');
-        const progressText = document.getElementById('progressPercentage');
-        if (progressBar && progressText) {
-            progressBar.style.width = '73%';
-            progressText.textContent = '73% Complete';
+// Updated function to fetch real data
+async function initializeBehavioralFeatures() {
+    try {
+        // Use supabaseClient instead of supabase
+        const { data: stats, error: statsError } = await supabaseClient
+            .from('behavioral_stats')
+            .select('*')
+            .single();
+
+        if (statsError) {
+            console.error('Stats error:', statsError);
+            // Fall back to default values
+            useDefaultValues();
+            return;
         }
-    }, 1000);
+		
+		console.log('Database stats:', stats); // Add this to see what you're getting
+        updateImpactStats(stats.improvements_count);
+        updateCommunityStats(stats.community_size);
+        updateSentimentTrend(stats.sentiment_change, stats.sentiment_direction);
+
+        // Rest of your function...
+        const { data: examples, error: examplesError } = await supabaseClient
+            .from('improvement_examples')
+            .select('*')
+            .eq('is_active', true)
+            .order('implemented_date', { ascending: false })
+            .limit(3);
+
+        // Continue with your existing code...
+    } catch (error) {
+        console.error('Failed to initialize behavioral features:', error);
+        useDefaultValues();
+    }
+}
+
+// Fallback function for default values
+function useDefaultValues() {
+    updateImpactStats(47);
+    updateCommunityStats(1247);
+    updateSentimentTrend(12, 'up');
+    setupCarouselDots();
+    startExampleRotation();
+}
+
+// Helper function to update examples
+function updateExamples(newExamples) {
+    const carousel = document.querySelector('.example-carousel');
+    const dotsContainer = document.querySelector('.carousel-dots');
     
-    // Set up carousel dots
+    if (!carousel || !dotsContainer) return;
+    
+    // Clear existing content
+    carousel.innerHTML = '';
+    dotsContainer.innerHTML = '';
+    
+    // Add new examples
+    newExamples.forEach((example, index) => {
+        const item = document.createElement('div');
+        item.className = `example-item ${index === 0 ? 'active' : ''}`;
+        item.innerHTML = `
+            <div class="example-text">${example.text}</div>
+            <div class="example-date">${example.date}</div>
+        `;
+        carousel.appendChild(item);
+        
+        const dot = document.createElement('div');
+        dot.className = `carousel-dot ${index === 0 ? 'active' : ''}`;
+        dot.setAttribute('data-slide', index);
+        dotsContainer.appendChild(dot);
+    });
+    
+    // Update global examples array
+    hospitalExamples.length = 0;
+    hospitalExamples.push(...newExamples);
+}
+
+// Helper function to set up carousel dots
+function setupCarouselDots() {
     const carouselDots = document.querySelectorAll('.carousel-dot');
     carouselDots.forEach((dot, index) => {
         dot.addEventListener('click', () => showExample(index));
     });
-    
-    // Start auto-rotation
-    startExampleRotation();
 }
 
+// Function to increment stats when feedback is submitted
+async function incrementFeedbackStats() {
+    console.log('Attempting to increment stats...');
+    try {
+        const { data: currentStats, error: fetchError } = await supabaseClient
+            .from('behavioral_stats')
+            .select('*')
+            .single();
+
+        if (fetchError) throw fetchError;
+
+        const { data, error } = await supabaseClient
+            .from('behavioral_stats')
+            .update({ 
+                community_size: currentStats.community_size + 1,
+                last_updated: new Date().toISOString()
+            })
+            .eq('id', currentStats.id)
+            .select();
+
+        if (error) throw error;
+        updateCommunityStats(currentStats.community_size + 1);
+
+    } catch (error) {
+        console.error('Failed to update stats:', error);
+    }
+}
 // Example carousel functions
 function showExample(index) {
     const items = document.querySelectorAll('.example-item');
@@ -2402,6 +2503,50 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add behavioral features initialization
     initializeBehavioralFeatures();
 });
+
+// Functions for updating stats (you can call these from browser console)
+async function updateImprovementCount(newCount) {
+    const { data, error } = await supabase
+        .from('behavioral_stats')
+        .update({ improvements_count: newCount })
+        .eq('id', 1);
+    
+    if (!error) {
+        updateImpactStats(newCount);
+        console.log(`Updated improvement count to ${newCount}`);
+    }
+}
+
+async function updateSentimentData(change, direction) {
+    const { data, error } = await supabase
+        .from('behavioral_stats')
+        .update({ 
+            sentiment_change: change,
+            sentiment_direction: direction
+        })
+        .eq('id', 1);
+    
+    if (!error) {
+        updateSentimentTrend(change, direction);
+        console.log(`Updated sentiment to ${direction} ${change}%`);
+    }
+}
+
+async function addNewExample(description, date, category = 'general') {
+    const { data, error } = await supabase
+        .from('improvement_examples')
+        .insert([{
+            description: description,
+            implemented_date: date,
+            category: category
+        }]);
+    
+    if (!error) {
+        console.log('Added new example:', description);
+        // Refresh the examples
+        initializeBehavioralFeatures();
+    }
+}
     </script>
 </body>
-    </html>
+	</html>
