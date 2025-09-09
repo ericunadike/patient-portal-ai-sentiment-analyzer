@@ -1044,7 +1044,7 @@
     <!-- Community Participation -->
     <div class="community-stats" id="communityStats">
         <div class="community-number" id="communityNumber">1,247</div>
-        <div class="community-text">patients helping improve healthcare at MSH</div>
+        <div class="community-text">feedback responses helping improve healthcare at MSH</div>
     </div>
 
     <!-- Sentiment Trend -->
@@ -1070,7 +1070,7 @@
                 <div class="example-date">Implemented: February 2024</div>
             </div>
             <div class="example-item">
-                <div class="example-text">"Your comments about organization helped us launch a public announcement system (PAS)."</div>
+                <div class="example-text">"Your comments about organized patient flow helped us launch a public announcement system (PAS)."</div>
                 <div class="example-date">Implemented: June 2025</div>
             </div>
         </div>
@@ -1442,73 +1442,6 @@
     font-weight: 600;
 }
 
-/* QUARTERLY PROGRESS BAR */
-.progress-section {
-    margin-bottom: 16px;
-    padding: 14px;
-    background: rgba(152, 251, 152, 0.05);
-    border-radius: 16px;
-    border: 1px solid rgba(152, 251, 152, 0.2);
-}
-
-.progress-title {
-    color: #2d3436;
-    font-size: 14px;
-    font-weight: 700;
-    margin-bottom: 10px;
-    text-align: center;
-}
-
-.progress-bar-container {
-    background: rgba(152, 251, 152, 0.2);
-    border-radius: 20px;
-    height: 10px;
-    overflow: hidden;
-    position: relative;
-    margin-bottom: 6px;
-}
-
-.progress-bar {
-    background: linear-gradient(90deg, #27ae60, #2ecc71);
-    height: 100%;
-    border-radius: 20px;
-    transition: width 2s ease-out;
-    position: relative;
-    overflow: hidden;
-}
-
-.progress-bar::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-    animation: progressShine 2s infinite;
-}
-
-@keyframes progressShine {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(100%); }
-}
-
-.progress-labels {
-    display: flex;
-    justify-content: space-between;
-    font-size: 11px;
-    color: #636e72;
-    font-weight: 600;
-}
-
-.progress-percentage {
-    text-align: center;
-    color: #27ae60;
-    font-weight: 800;
-    font-size: 12px;
-    margin-top: 6px;
-}
-
 /* SENTIMENT TREND */
 .sentiment-card {
     background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
@@ -1664,7 +1597,7 @@
     </style>
 
     <script>
-		// Initialize Supabase - REPLACE WITH YOUR ACTUAL VALUES
+		// Initialize Supabase
     const SUPABASE_URL = 'https://kklctifgfpfxrivduvqn.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtrbGN0aWZnZnBmeHJpdmR1dnFuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTczNTQ2MzYsImV4cCI6MjA3MjkzMDYzNn0.RoiW9fqm3K_cSvDzlHAkewaMv9p6PgwuOf8nrr4dC3I';
     const { createClient } = supabase;
@@ -1967,13 +1900,12 @@
                 submitFeedback(feedbackData);
             });
 
-            // Modify your existing submitFeedback function
 			function submitFeedback(data) {
 				const submitBtn = document.getElementById('submitBtn');
 				submitBtn.innerHTML = '<span style="opacity: 0.7">🚀 Sending Feedback...</span>';
 				submitBtn.disabled = true;
 
-				// Send the email as before
+				// Send the email
 				sendFeedbackEmail(data);
 
 				// Update the community stats
@@ -2263,8 +2195,6 @@
             });
         });
 
-	// Add these functions to your existing JavaScript
-
 // Global variables for behavioral features
 let currentExampleIndex = 0;
 const hospitalExamples = [
@@ -2311,7 +2241,6 @@ async function initializeBehavioralFeatures() {
             .order('implemented_date', { ascending: false })
             .limit(3);
 
-        // Continue with your existing code...
     } catch (error) {
         console.error('Failed to initialize behavioral features:', error);
         useDefaultValues();
@@ -2422,7 +2351,7 @@ function startExampleRotation() {
     setInterval(nextExample, 5000); // Change every 5 seconds
 }
 
-// Functions to update data (for future backend integration)
+// Functions to update data (for backend integration)
 function updateImpactStats(newNumber) {
     const impactElement = document.getElementById('impactNumber');
     if (impactElement) {
@@ -2502,9 +2431,10 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Add behavioral features initialization
     initializeBehavioralFeatures();
+	startExampleRotation();
 });
 
-// Functions for updating stats (you can call these from browser console)
+// Functions for updating stats
 async function updateImprovementCount(newCount) {
     const { data, error } = await supabase
         .from('behavioral_stats')
